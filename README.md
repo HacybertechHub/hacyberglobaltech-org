@@ -37,5 +37,5 @@ Designed as a modern concept interface for automation systems, secure activation
 v1.0.4-STABLE
 
 # Author
-Godfrey Joshua-
-** HACYBERGLOBALTECH
+Godfrey 
+HACYBERGLOBALTECH
