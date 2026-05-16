@@ -1,0 +1,276 @@
+<html lang="en"><head>
+<!-- Playables SDK -->
+<script>// Playables SDK v1.0.0
+// Game lifecycle bridge: rAF-based game-ready detection + event communication
+(function() {
+  'use strict';
+
+  // Idempotency: skip if already initialized (e.g., server-side injection
+  // followed by client-side inject-javascript via the Bloks webview component).
+  if (window.playablesSDK) return;
+
+  var HANDLER_NAME = 'playablesGameEventHandler';
+  var ANDROID_BRIDGE_NAME = '_MetaPlayablesBridge';
+  var RAF_FRAME_THRESHOLD = 3;
+
+  var gameReadySent = false;
+  var firstInteractionSent = false;
+  var errorSent = false;
+  var frameCount = 0;
+  var originalRAF = window.requestAnimationFrame;
+
+  // --- Transport Layer ---
+
+  function hasIOSBridge() {
+    return !!(window.webkit &&
+              window.webkit.messageHandlers &&
+              window.webkit.messageHandlers[HANDLER_NAME]);
+  }
+
+  function hasAndroidBridge() {
+    return !!(window[ANDROID_BRIDGE_NAME] &&
+              typeof window[ANDROID_BRIDGE_NAME].postEvent === 'function');
+  }
+
+  function isInIframe() {
+    return !!(window.parent && window.parent !== window);
+  }
+
+  function sendEvent(eventName, payload) {
+    var message = {
+      type: eventName,
+      payload: payload || {},
+      timestamp: Date.now()
+    };
+
+    if (hasIOSBridge()) {
+      try {
+        window.webkit.messageHandlers[HANDLER_NAME].postMessage(message);
+      } catch (e) { /* ignore */ }
+      return;
+    }
+
+    if (hasAndroidBridge()) {
+    try {
+      var p = payload || {};
+      p.__secureToken = window.__fbAndroidBridgeAuthToken || '';
+      p.timestamp = message.timestamp;
+      window[ANDROID_BRIDGE_NAME].postEvent(
+        eventName,
+        JSON.stringify(p)
+      );
+    } catch (e) { /* ignore */ }
+    return;
+  }
+
+    if (isInIframe()) {
+      try {
+        window.parent.postMessage(message, '*');
+      } catch (e) { /* ignore */ }
+      return;
+    }
+  }
+
+  // --- rAF Game-Ready Detection ---
+
+  function onFrame() {
+    if (gameReadySent) return;
+
+    frameCount++;
+    if (frameCount >= RAF_FRAME_THRESHOLD) {
+      gameReadySent = true;
+      sendEvent('game_ready', {
+        frame_count: frameCount,
+        detected_at: Date.now()
+      });
+      return;
+    }
+
+    originalRAF.call(window, onFrame);
+  }
+
+  if (originalRAF) {
+    window.requestAnimationFrame = function(callback) {
+      if (!gameReadySent) {
+        return originalRAF.call(window, function(timestamp) {
+          frameCount++;
+          if (frameCount >= RAF_FRAME_THRESHOLD && !gameReadySent) {
+            gameReadySent = true;
+            sendEvent('game_ready', {
+              frame_count: frameCount,
+              detected_at: Date.now()
+            });
+          }
+          callback(timestamp);
+        });
+      }
+      return originalRAF.call(window, callback);
+    };
+  }
+
+  // --- First User Interaction Detection ---
+
+  function setupFirstInteractionDetection() {
+    var events = ['touchstart', 'mousedown', 'keydown'];
+
+    function onFirstInteraction() {
+      if (firstInteractionSent) return;
+      firstInteractionSent = true;
+      sendEvent('user_interaction_start', null);
+
+      for (var i = 0; i < events.length; i++) {
+        document.removeEventListener(events[i], onFirstInteraction, true);
+      }
+    }
+
+    for (var i = 0; i < events.length; i++) {
+      document.addEventListener(events[i], onFirstInteraction, true);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupFirstInteractionDetection);
+  } else {
+    setupFirstInteractionDetection();
+  }
+
+  // --- Auto Error Capture ---
+
+  window.addEventListener('error', function(event) {
+    if (errorSent) return;
+    errorSent = true;
+    sendEvent('error', {
+      message: event.message || 'Unknown error',
+      source: event.filename || '',
+      lineno: event.lineno || 0,
+      colno: event.colno || 0,
+      auto_captured: true
+    });
+  });
+
+  window.addEventListener('unhandledrejection', function(event) {
+    if (errorSent) return;
+    errorSent = true;
+    var reason = event.reason;
+    sendEvent('error', {
+      message: (reason instanceof Error) ? reason.message : String(reason),
+      type: 'unhandled_promise_rejection',
+      auto_captured: true
+    });
+  });
+
+  // --- Public API ---
+
+  window.playablesSDK = {
+    complete: function(score) {
+      sendEvent('game_ended', {
+        score: score,
+        completed: true
+      });
+    },
+
+    error: function(message) {
+      if (errorSent) return;
+      errorSent = true;
+      sendEvent('error', {
+        message: message || 'Unknown error',
+        auto_captured: false
+      });
+    },
+
+    sendEvent: function(eventName, payload) {
+      if (!eventName || typeof eventName !== 'string') return;
+      sendEvent(eventName, payload);
+    }
+  };
+
+  // Kick off rAF detection in case no game code calls rAF immediately
+  if (originalRAF) {
+    originalRAF.call(window, onFrame);
+  }
+})();</script>
+<!-- PLAYABLE_TOUCH_PATCH_V1 --><script>
+(function() {
+  if (window.__playableTouchPatchInstalled) return;
+  window.__playableTouchPatchInstalled = true;
+  var origAdd = EventTarget.prototype.addEventListener;
+  var blockedTypes = { touchstart: 1, touchmove: 1, wheel: 1 };
+  EventTarget.prototype.addEventListener = function(type, listener, options) {
+    if (blockedTypes[type]) {
+      if (options === undefined || options === null) {
+        options = { passive: true };
+      } else if (typeof options === 'boolean') {
+        options = { capture: options, passive: true };
+      } else {
+        options = Object.assign({}, options, { passive: true });
+      }
+    }
+    return origAdd.call(this, type, listener, options);
+  };
+})();
+</script><script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script>
+<meta charset="UTF-8">
+<title>HACYBER GLOBALTECH - Bot Grabber $130</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:#0a0a0a;color:#fff;margin:0;padding:20px}
+h1{color:#00ff88;text-align:center}
+.card{background:#111;border:1px solid #333;border-radius:12px;padding:20px;margin:15px auto;max-width:600px}
+.price{font-size:32px;color:#00ff88;font-weight:700}
+.note{color:#ffaa00;font-weight:600;margin:10px 0}
+ul{line-height:1.8}
+.btn{background:#00ff88;color:#000;padding:12px 20px;border:none;border-radius:8px;font-weight:700;cursor:pointer;width:100%;margin-top:10px}
+#timer{display:none}
+#countdown{font-size:48px;text-align:center;color:#00ff88}
+</style>
+</head>
+<body>
+<h1>HACYBER GLOBALTECH</h1>
+
+<div class="card">
+  <div class="price">$130 Bot Grabber</div>
+  <p class="note">⏱️ Link sent within 35 minutes max after payment verification</p>
+  <p><strong>First-time setup:</strong> $130 • <strong>Monthly renewal:</strong> $90</p>
+  <p><strong>Works on:</strong> DoorDash • Uber Eats • Grubhub • Instacart • Amazon Flex</p>
+</div>
+
+<div class="card">
+  <h3>Pay with Crypto</h3>
+  <p><strong>BTC:</strong> bc1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+  <p><strong>ETH/USDT (ERC20):</strong> 0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+  <p><strong>SOL:</strong> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+</div>
+
+<div class="card">
+  <h3>Pay with Bank (Lead Bank)</h3>
+  <p><strong>Routing:</strong> 101019999</p>
+  <p><strong>Account:</strong> 1234567890</p>
+  <p><strong>Name:</strong> Hacyber Globaltech</p>
+</div>
+
+<div class="card">
+  <h3>After Payment</h3>
+  <ol>
+    <li>Screenshot your payment</li>
+    <li>Send to @hacyberglobal on Telegram</li>
+    <li>Receive bot link within 35 min</li>
+  </ol>
+  <button class="btn" onclick="document.getElementById('timer').style.display='block'">I Paid - Start Timer</button>
+</div>
+
+<div id="timer" class="card">
+  <h3>Payment received! Your link arrives in:</h3>
+  <div id="countdown">35:00</div>
+  <p style="text-align:center;color:#aaa">Do not close this page</p>
+</div>
+
+<script>
+let t = 2100;
+const cd = document.getElementById('countdown');
+setInterval(()=>{
+  if(t>0 && cd){t--;const m=String(Math.floor(t/60)).padStart(2,'0');const s=String(t%60).padStart(2,'0');cd.textContent=`${m}:${s}`;}
+},1000);
+</script>
+
+
+</body></html>
