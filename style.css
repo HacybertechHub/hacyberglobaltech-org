@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0d1117;
+  color: white;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background: #111827;
+  position: sticky;
+  top: 0;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #3b82f6;
+}
+
+nav a {
+  color: white;
+  margin-left: 20px;
+  text-decoration: none;
+}
+
+.hero {
+  text-align: center;
+  padding: 120px 20px;
+  background: linear-gradient(135deg, #0f172a, #111827);
+}
+
+.hero h1 {
+  font-size: 48px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.hero p {
+  max-width: 700px;
+  margin: 20px auto;
+  font-size: 18px;
+  color: #cbd5e1;
+}
+
+.btn {
+  display: inline-block;
+  padding: 14px 28px;
+  background: #2563eb;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-top: 20px;
+}
+
+.section {
+  padding: 80px 40px;
+}
+
+.section h2 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #1f2937;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.dark {
+  background: #111827;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  background: #0b0f14;
+  color: #9ca3af;
+}

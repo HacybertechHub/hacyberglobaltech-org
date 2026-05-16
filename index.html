@@ -1,287 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>HACYBERGLOBATECH LLC | Digital Systems & Automation</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-    <style>
-        :root {
-            --primary: #1F6FEB;
-            --accent: #00FFB2;
-            --bg-dark: #0B0F1A;
-            --card-bg: #111827;
-            --text-main: #ffffff;
-            --text-dim: #94a3b8;
-        }
-
-        * { box-sizing: border-box; }
-
-        body {
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-main);
-            line-height: 1.6;
-            scroll-behavior: smooth;
-        }
-
-        /* Header & Brand Section */
-        header {
-            padding: 120px 20px 80px;
-            text-align: center;
-            background: radial-gradient(circle at top, rgba(31, 111, 235, 0.15), transparent);
-        }
-
-        .logo-container {
-            margin-bottom: 24px;
-            display: inline-block;
-        }
-
-        .company-logo {
-            width: 80px;
-            height: 80px;
-            filter: drop-shadow(0 0 10px rgba(0, 255, 178, 0.3));
-        }
-
-        h1 {
-            font-size: clamp(32px, 6vw, 52px);
-            margin: 10px 0;
-            font-weight: 800;
-            letter-spacing: -2px;
-            background: linear-gradient(to right, #fff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .tagline {
-            color: var(--accent);
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            opacity: 0.9;
-        }
-
-        /* Sections */
-        section {
-            padding: 80px 24px;
-            max-width: 1100px;
-            margin: auto;
-        }
-
-        h2 {
-            font-size: 24px;
-            margin-bottom: 40px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 32px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-
-        /* Grid Layouts */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 24px;
-        }
-
-        .service-card i {
-            font-size: 28px;
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .service-card h3 {
-            margin-top: 0;
-            font-size: 20px;
-        }
-
-        .service-card p {
-            color: var(--text-dim);
-            font-size: 15px;
-            margin-bottom: 0;
-        }
-
-        /* Operational Model */
-        .model-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(31, 111, 235, 0.05);
-            padding: 20px;
-            border-radius: 100px;
-            border: 1px solid rgba(31, 111, 235, 0.1);
-        }
-
-        .step {
-            font-weight: 600;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent);
-            padding: 0 15px;
-        }
-
-        .arrow { color: rgba(255,255,255,0.2); }
-
-        /* Buttons & Contact */
-        .btn {
-            background: var(--primary);
-            padding: 16px 32px;
-            border: none;
-            color: white;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn:hover {
-            background: #2563eb;
-            transform: scale(1.02);
-            box-shadow: 0 10px 20px rgba(31, 111, 235, 0.3);
-        }
-
-        .contact-box {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 30px;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 60px 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 13px;
-            color: var(--text-dim);
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {
-            header { padding: 80px 20px 40px; }
-            .model-container {
-                flex-direction: column;
-                border-radius: 20px;
-                gap: 15px;
-            }
-            .arrow { transform: rotate(90deg); }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HACYBERGLOBATECH</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <header>
+    <div class="logo">HACYBERGLOBATECH</div>
+    <nav>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-<header>
-    <div class="logo-container">
-        <svg class="company-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 30L50 15L80 30V70L50 85L20 70V30Z" fill="none" stroke="url(#grad)" stroke-width="4"/>
-            <path d="M35 45L50 35L65 45V55L50 65L35 55V45Z" fill="#00FFB2"/>
-            <defs>
-                <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#1F6FEB;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#00FFB2;stop-opacity:1" />
-                </linearGradient>
-            </defs>
-        </svg>
+  <section class="hero">
+    <h1>Advanced Digital Operations & Automation Solutions</h1>
+    <p>
+      We help businesses streamline workflows, optimize operations,
+      and scale through automation and digital infrastructure.
+    </p>
+    <a class="btn" href="#contact">Get Started</a>
+  </section>
+
+  <section id="services" class="section">
+    <h2>Our Services</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Automation Systems</h3>
+        <p>Workflow automation and operational optimization tools.</p>
+      </div>
+      <div class="card">
+        <h3>Business Identity Setup</h3>
+        <p>Professional setup for digital businesses and startups.</p>
+      </div>
+      <div class="card">
+        <h3>Technical Support</h3>
+        <p>Remote support for systems, operations, and infrastructure.</p>
+      </div>
     </div>
-    <h1>HACYBERGLOBATECH LLC</h1>
-    <div class="tagline">Digital Systems • Automation • Engineering</div>
-</header>
+  </section>
 
-<section id="about">
-    <h2><i class="fas fa-info-circle text-blue-500"></i> About</h2>
-    <div class="card">
-        <p style="font-size: 1.1rem; margin: 0; color: #e2e8f0;">
-            We are a technology-first agency specializing in the architecture of modern digital ecosystems. From high-performance software to complex workflow automation, HACYBERGLOBATECH LLC delivers scalable technical infrastructure for the digital era.
-        </p>
-    </div>
-</section>
+  <section id="about" class="section dark">
+    <h2>About</h2>
+    <p>
+      HACYBERGLOBATECH is a modern digital operations company focused on
+      workflow optimization, scalable systems, and automation solutions.
+    </p>
+  </section>
 
-<section id="services">
-    <h2><i class="fas fa-bolt text-blue-500"></i> Services</h2>
-    <div class="grid">
-        <div class="card service-card">
-            <i class="fas fa-terminal"></i>
-            <h3>Software Dev</h3>
-            <p>Full-stack development, API architecture, and microservices.</p>
-        </div>
-        <div class="card service-card">
-            <i class="fas fa-microchip"></i>
-            <h3>Automation</h3>
-            <p>Smart workflows and AI integration to reduce operational overhead.</p>
-        </div>
-        <div class="card service-card">
-            <i class="fas fa-layer-group"></i>
-            <h3>System Design</h3>
-            <p>Connecting fragmented tools into a unified, high-speed system.</p>
-        </div>
-        <div class="card service-card">
-            <i class="fas fa-shield-halved"></i>
-            <h3>Tech Strategy</h3>
-            <p>Technical auditing and long-term digital scaling roadmaps.</p>
-        </div>
-    </div>
-</section>
+  <section id="contact" class="section">
+    <h2>Contact</h2>
+    <p>Email: support@hacyberglobatech.com</p>
+    <p>Phone: +1 (470) 283-0342</p>
+  </section>
 
-<section id="process">
-    <h2><i class="fas fa-diagram-project text-blue-500"></i> Operational Flow</h2>
-    <div class="model-container">
-        <div class="step">Intake</div>
-        <div class="arrow"><i class="fas fa-chevron-right"></i></div>
-        <div class="step">Analysis</div>
-        <div class="arrow"><i class="fas fa-chevron-right"></i></div>
-        <div class="step">Design</div>
-        <div class="arrow"><i class="fas fa-chevron-right"></i></div>
-        <div class="step">Execute</div>
-        <div class="arrow"><i class="fas fa-chevron-right"></i></div>
-        <div class="step">Deliver</div>
-    </div>
-</section>
-
-<section id="contact">
-    <h2><i class="fas fa-paper-plane text-blue-500"></i> Get Started</h2>
-    <div class="card contact-box">
-        <div>
-            <div style="margin-bottom: 10px;"><i class="fas fa-envelope text-blue-500 mr-2"></i> support@hacyberglobatech.com</div>
-            <div><i class="fas fa-phone text-blue-500 mr-2"></i> +1 470 283 0342</div>
-        </div>
-        <a href="mailto:support@hacyberglobatech.com" class="btn">
-            Request Service <i class="fas fa-arrow-right"></i>
-        </a>
-    </div>
-</section>
-
-<footer>
-    <div>&copy; 2026 HACYBERGLOBATECH LLC</div>
-    <div style="margin-top: 8px; opacity: 0.6; font-size: 11px; letter-spacing: 1px;">SECURE • AUTOMATED • SCALABLE</div>
-</footer>
-
+  <footer>
+    <p>© 2026 HACYBERGLOBATECH. All rights reserved.</p>
+  </footer>
 </body>
 </html>
